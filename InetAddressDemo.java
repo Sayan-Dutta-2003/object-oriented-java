@@ -1,3 +1,5 @@
+// 22.	Write a Java Program to demonstrate inet address.
+
 import java.net.InetAddress;
 
 public class InetAddressDemo {
