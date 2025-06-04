@@ -23,15 +23,15 @@ public class DigitalClock extends JFrame {
         // Create time label
         timeLabel = new JLabel("", JLabel.CENTER);
         timeLabel.setFont(new Font("Digital-7", Font.BOLD, 60));
-        timeLabel.setForeground(Color.GREEN);
-        timeLabel.setBackground(Color.BLACK);
+        timeLabel.setForeground(Color.BLACK);
+        timeLabel.setBackground(Color.WHITE);
         timeLabel.setOpaque(true);
 
         // Create date label
         dateLabel = new JLabel("", JLabel.CENTER);
         dateLabel.setFont(new Font("Arial", Font.PLAIN, 20));
-        dateLabel.setForeground(Color.WHITE);
-        dateLabel.setBackground(Color.BLACK);
+        dateLabel.setForeground(Color.BLACK);
+        dateLabel.setBackground(Color.WHITE);
         dateLabel.setOpaque(true);
 
         // Add components to frame
