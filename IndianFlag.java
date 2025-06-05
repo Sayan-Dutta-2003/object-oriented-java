@@ -32,9 +32,6 @@ public class IndianFlag extends JFrame {
 
             // Draw the flag
             drawIndianFlag(g2d);
-
-            // Add text label
-            drawText(g2d);
         }
 
         private void drawFlagPole(Graphics2D g2d) {
@@ -108,14 +105,6 @@ public class IndianFlag extends JFrame {
 
             // Draw the small inner circle
             g2d.fill(new Ellipse2D.Double(centerX - 4, centerY - 4, 8, 8));
-        }
-
-        private void drawText(Graphics2D g2d) {
-            g2d.setColor(new Color(0, 0, 128));
-            g2d.setFont(new Font("Arial", Font.BOLD, 24));
-            String text = "भारत का राष्ट्रीय ध्वज";
-            int textWidth = g2d.getFontMetrics().stringWidth(text);
-            g2d.drawString(text, getWidth() / 2 - textWidth / 2, 380);
         }
     }
 
