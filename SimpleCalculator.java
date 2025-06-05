@@ -1,5 +1,3 @@
-// 46.	Write a Java program to create a calculator.
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -10,27 +8,22 @@ public class SimpleCalculator extends JFrame implements ActionListener {
     private double firstNumber = 0;
     private String operation = "";
     private boolean startNewNumber = true;
+    private String secondInput = "";
 
     public SimpleCalculator() {
-        // Set up the calculator window
         setTitle("Simple Calculator");
         setSize(300, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Create the display
-        display = new JTextField();
+        display = new JTextField("0");
         display.setFont(new Font("Arial", Font.PLAIN, 24));
         display.setHorizontalAlignment(JTextField.RIGHT);
         display.setEditable(false);
         add(display, BorderLayout.NORTH);
 
-        // Create button panel
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(4, 4, 5, 5));
-
-        // Button labels
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 4, 5, 5));
         String[] buttons = {
                 "7", "8", "9", "/",
                 "4", "5", "6", "*",
@@ -38,7 +31,6 @@ public class SimpleCalculator extends JFrame implements ActionListener {
                 "C", "0", "=", "+"
         };
 
-        // Create and add buttons
         for (String text : buttons) {
             JButton button = new JButton(text);
             button.setFont(new Font("Arial", Font.BOLD, 18));
@@ -51,60 +43,73 @@ public class SimpleCalculator extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
+        String cmd = e.getActionCommand();
 
-        if (command.charAt(0) >= '0' && command.charAt(0) <= '9') {
-            // Digit button pressed
-            if (startNewNumber) {
-                display.setText("");
-                startNewNumber = false;
+        if (Character.isDigit(cmd.charAt(0))) {
+            if (operation.isEmpty()) {
+                // Entering first number
+                if (startNewNumber) {
+                    display.setText("");
+                    startNewNumber = false;
+                }
+                display.setText(display.getText() + cmd);
+            } else {
+                // Entering second number
+                secondInput += cmd;
+                display.setText(firstNumber + " " + operation + " " + secondInput);
             }
-            display.setText(display.getText() + command);
-        } else if (command.equals("C")) {
-            // Clear button pressed
+
+        } else if (cmd.equals("C")) {
             display.setText("0");
             firstNumber = 0;
             operation = "";
+            secondInput = "";
             startNewNumber = true;
-        } else if (command.equals("=")) {
-            // Equals button pressed
-            if (!operation.isEmpty()) {
-                double secondNumber = Double.parseDouble(display.getText());
+
+        } else if (cmd.equals("=")) {
+            if (!operation.isEmpty() && !secondInput.isEmpty()) {
+                double secondNumber = Double.parseDouble(secondInput);
                 double result = calculate(firstNumber, secondNumber, operation);
-                display.setText(String.valueOf(result));
+                String fullExpr = display.getText();
+
+                // Show expression first
+                display.setText(fullExpr);
+
+                // After 1 second, show result
+                Timer timer = new Timer(1000, ev -> display.setText(String.valueOf(result)));
+                timer.setRepeats(false);
+                timer.start();
+
+                // Reset for next operation
+                firstNumber = result;
                 operation = "";
+                secondInput = "";
                 startNewNumber = true;
             }
-        } else {
-            // Operation button pressed
-            if (!operation.isEmpty()) {
-                // If there's already an operation pending, calculate it first
-                double secondNumber = Double.parseDouble(display.getText());
-                double result = calculate(firstNumber, secondNumber, operation);
-                display.setText(String.valueOf(result));
-                firstNumber = result;
-            } else {
-                firstNumber = Double.parseDouble(display.getText());
+
+        } else { // Operators: + - * /
+            if (!display.getText().isEmpty()) {
+                try {
+                    firstNumber = Double.parseDouble(display.getText());
+                    operation = cmd;
+                    startNewNumber = false;
+                } catch (NumberFormatException ignored) {
+                }
             }
-            operation = command;
-            startNewNumber = true;
         }
     }
 
     private double calculate(double a, double b, String op) {
-        switch (op) {
-            case "+": return a + b;
-            case "-": return a - b;
-            case "*": return a * b;
-            case "/": return a / b;
-            default: return b;
-        }
+        return switch (op) {
+            case "+" -> a + b;
+            case "-" -> a - b;
+            case "*" -> a * b;
+            case "/" -> b != 0 ? a / b : 0;
+            default -> b;
+        };
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            SimpleCalculator calculator = new SimpleCalculator();
-            calculator.setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new SimpleCalculator().setVisible(true));
     }
 }
