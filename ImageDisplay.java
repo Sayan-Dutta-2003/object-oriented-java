@@ -1,5 +1,3 @@
-// 48.	Write a Java program to display an image.
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -10,9 +8,9 @@ import javax.imageio.ImageIO;
 public class ImageDisplay extends JFrame {
 
     public ImageDisplay(String imagePath) {
-        setTitle("400x400 Image Display");
+        setTitle("400x300 Image Display");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 600); // Set fixed window size
+        setSize(400, 300); // Fixed window size
 
         try {
             // Load the original image
@@ -21,9 +19,15 @@ public class ImageDisplay extends JFrame {
             // Resize the image to 400x400
             Image resizedImage = originalImage.getScaledInstance(400, 400, Image.SCALE_SMOOTH);
 
-            // Create a BufferedImage from the resized Image
+            // Create a white background BufferedImage
             BufferedImage bufferedResizedImage = new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB);
             Graphics2D g2d = bufferedResizedImage.createGraphics();
+
+            // Fill the background with white
+            g2d.setColor(Color.WHITE);
+            g2d.fillRect(0, 0, 300, 300);
+
+            // Draw the resized image on top
             g2d.drawImage(resizedImage, 0, 0, null);
             g2d.dispose();
 
@@ -40,13 +44,10 @@ public class ImageDisplay extends JFrame {
     }
 
     public static void main(String[] args) {
-        if (args.length == 0) {
-            System.out.println("Usage: java ResizedImageDisplay <image-file-path>");
-            System.exit(0);
-        }
 
+        String imagePath = "src//pexels-photo-751378.jpeg";
         SwingUtilities.invokeLater(() -> {
-            ImageDisplay display = new ImageDisplay(args[0]);
+            ImageDisplay display = new ImageDisplay(imagePath);
             display.setVisible(true);
         });
     }
