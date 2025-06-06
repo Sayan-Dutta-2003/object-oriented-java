@@ -67,6 +67,4 @@ public class ArrayStack implements StackInterface{
     public int size() {
         return top + 1;
     }
-
-
 }
