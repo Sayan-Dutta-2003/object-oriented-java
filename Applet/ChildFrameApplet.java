@@ -4,7 +4,6 @@ import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
 
-// Applet class
 public class ChildFrameApplet extends Applet implements ActionListener {
     Button openFrameButton;
 
@@ -15,12 +14,10 @@ public class ChildFrameApplet extends Applet implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        // Open child frame when button is clicked
         new ChildFrame("Child Frame Window");
     }
 }
 
-// Child Frame class
 class ChildFrame extends Frame {
     ChildFrame(String title) {
         super(title);
@@ -30,7 +27,6 @@ class ChildFrame extends Frame {
         add(label);
         setVisible(true);
 
-        // Close the frame properly when user clicks the close button
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 dispose();
